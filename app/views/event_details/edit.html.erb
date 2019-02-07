@@ -1,0 +1,42 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><%= @event_detail.event.name %> - 到考人數登記</h4>
+  </div>
+  <div class="panel-body">
+    <%= form_for(@event_detail, url: event_event_detail_path(@event_detail.event_id, @event_detail.id), method: :put) do |f| %>
+      <div class="form-group">
+        <%= f.label "考場" %>
+        <input class="form-control" disabled="disabled" type="text" value="<%= @event_detail.classroom.display_name %>">
+      </div>
+      <div class="form-group">
+        <%= f.label "場次" %>
+        <input class="form-control" disabled="disabled" type="text" value="<%= @event_detail.testtime.name %>">
+      </div>
+      <div class="form-group">
+        <%= f.label "應到人數" %>
+        <%= f.text_field :expected, value: @event_detail.expected, class: "form-control", disabled: true %>
+      </div>
+      <div class="form-group">
+        <%= f.label "實到人數 (不包括重測考生)" %>
+        <%= f.text_field :actual, type: 'number', min: '0', max: '99', value: @event_detail.actual, placeholder: '請輸入實到人數', class: "form-control", autofocus: true, required: "required" %>
+      </div>
+      <div class="form-group">
+        <%= f.label "缺考人數 (送出後自動計算)" %>
+        <input class="form-control" disabled="disabled" type="text" value="<%= @event_detail.absent %>" placeholder="本欄位將會在送出後自動計算">
+      </div>
+      <div class="form-group">
+        <%= f.label "重測人數 (他場至本場重測人數)" %>
+        <%= f.text_field :retake, type: 'number', min: '0', max: '99', value: @event_detail.retake, placeholder: '請輸入重測人數 (他場至本場重測人數)', class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= f.label "違規人數" %>
+        <%= f.text_field :violate, value: @event_detail.violate, type: 'number', min: '0', max: '99', placeholder: '請輸入違規人數', class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= f.label "備註" %>
+        <%= f.text_area :note, value: @event_detail.note, class: "form-control" %>
+      </div>
+      <%= f.submit "送出", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+table_for assigns[:areas] do
+  column '地區' do |area|
+    area.name
+  end
+  column '應到人數' do |area|
+    area.event_details(event_id: params[:id]).sum(:expected)
+  end
+  column '實到人數' do |area|
+    area.event_details(event_id: params[:id]).sum(:actual)
+  end
+  column '缺考人數' do |area|
+    (area.event_details(event_id: params[:id]).sum(:expected) - area.event_details(event_id: params[:id]).sum(:actual))
+  end
+  column '重測人數' do |area|
+    area.event_details(event_id: params[:id]).sum(:retake)
+  end
+  column '違規人數' do |area|
+    area.event_details(event_id: params[:id]).sum(:violate)
+  end
+end

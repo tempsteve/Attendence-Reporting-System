@@ -1,0 +1,28 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4>考試列表</h4>
+  </div>
+  <div class="panel-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>考試名稱</th>
+                    <th>舉辦時間</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% @events.each do |event| %>
+                <tr>
+                    <td><%= event.name %></td>
+                    <td><%= event.event_date %></td>
+                    <td><%= link_to "考場資訊列表", event_event_details_path(event.id), class: "btn btn-sm btn-success" %>
+                        <% if current_user.is_admin? %>
+                            <%= link_to "統計報表", event_path(event.id), class: "btn btn-sm btn-info" %></td>
+                        <% end %>
+                </tr>
+                <% end %>
+            </tbody>
+        </table>
+    </div>
+</div>

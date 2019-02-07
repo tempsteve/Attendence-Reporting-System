@@ -1,0 +1,4 @@
+<%# add navigation links to this file %>
+<% if user_signed_in? %>
+  <%= link_to "登出", destroy_user_session_path, method: :delete, class: 'navbar-brand' %>
+<% end %>

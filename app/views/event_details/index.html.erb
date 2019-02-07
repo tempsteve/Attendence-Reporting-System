@@ -1,0 +1,57 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4>考場資訊列表</h4>
+  </div>
+  <div class="panel-body">
+    <table class="table table-striped" id="event_details">
+        <thead>
+            <tr>
+                <th>考場</th>
+                <th>場次</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @event_details.each do |event_detail| %>
+            <tr>
+                <td><%= event_detail.classroom.display_name %></td>
+                <td><%= event_detail.testtime.name %></td>
+                <% if event_detail.actual == nil %>
+                  <td data-class="expand"><%= link_to "到考人數登記", edit_event_event_detail_path(event_detail.event_id, event_detail.id), class: "btn btn-sm btn-danger" %></td>
+                <% else %>
+                  <td data-class="expand"><%= link_to "本場登記完成", edit_event_event_detail_path(event_detail.event_id, event_detail.id), class: "btn btn-sm btn-success" %></td>
+                <% end %>
+            </tr>
+            <% end %>
+        </tbody>
+    </table>
+  </div>
+</div>
+<script>
+    $(document).ready(function(){
+        var responsiveHelper = undefined;
+        var breakpointDefinition = {
+            tablet: 1024,
+            phone : 480
+        };
+        var tableElement = $('#event_details');
+        tableElement.dataTable({
+            ordering: false,
+            info:     false,
+            stateSave: true,
+            autoWidth: false,
+            preDrawCallback: function () {
+                // Initialize the responsive datatables helper once.
+                if (!responsiveHelper) {
+                    responsiveHelper = new ResponsiveDatatablesHelper(tableElement, breakpointDefinition);
+                }
+            },
+            rowCallback    : function (nRow) {
+                responsiveHelper.createExpandIcon(nRow);
+            },
+            drawCallback   : function (oSettings) {
+                responsiveHelper.respond();
+            }
+        });
+    });
+</script>

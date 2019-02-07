@@ -1,0 +1,40 @@
+# SQLite version 3.x
+#   gem install sqlite3
+#
+#   Ensure the SQLite 3 gem is defined in your Gemfile
+#   gem 'sqlite3'
+#
+default: &default
+  adapter: mysql2
+  encoding: utf8
+  pool: 5
+  timeout: 5000
+
+development:
+  <<: *default
+  database: ARS_dev
+  host: localhost
+  username: 'root'
+  password: 'p@ssw0rd' #plz change the default passwd
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  <<: *default
+  database: ARS_test
+  host: localhost
+  username: 'root'
+  password: 'p@ssw0rd' #plz change the default passwd
+
+production:
+  #adapter: postgresql
+  #encoding: unicode
+  # For details on connection pooling, see rails configuration guide
+  # http://guides.rubyonrails.org/configuring.html#database-pooling
+  #pool: 5
+  <<: *default
+  database: ARS_prod
+  host: localhost
+  username: 'root'
+  password: 'p@ssw0rd' #plz change the default passwd

@@ -1,0 +1,15 @@
+<% @announcements.each do |announcement| %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><%= announcement.title %></h4>
+  </div>
+  <div class="panel-body">
+    <%= simple_format announcement.content %>
+  </div>
+  <div class="panel-footer clearfix">
+      <div class="pull-right">
+        <strong>發佈時間:<%= announcement.created_at %></strong>
+      </div>
+  </div>
+</div>
+<% end %>

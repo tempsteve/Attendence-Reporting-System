@@ -1,0 +1,140 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><%= @event.name %> - 統計報表</h4>
+  </div>
+  <div class="panel-body">
+    <h2>到考狀況統計</h2>
+    <!-- Nav tabs -->
+    <ul id="testtime_tabs" class="nav nav-tabs" role="tablist">
+      <li class="active"><a href="#actual_testtime0" role="tab" data-toggle="tab">全國</a></li>
+      <% @event.uniq_testtimes.each_with_index do |testtime, index| %>
+        <li><a href="#actual_testtime<%= "#{index+1}"%>" role="tab" data-toggle="tab"><%= testtime.name%></a></li>
+      <% end %>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div class="tab-pane active" id="actual_testtime0">
+        <div id="column_actual_testtime0">
+          <%= render_chart @event.charts_actual[:column_chart], 'column_actual_testtime0' %>
+        </div>
+        <div id="table_actual_testtime0">
+          <%= render_chart @event.charts_actual[:table_chart], 'table_actual_testtime0' %>
+        </div>
+      </div>
+      <% @event.uniq_testtimes.each_with_index do |testtime, index| %>
+        <div class="tab-pane" id="actual_testtime<%= "#{index+1}"%>">
+          <div id="column_actual_testtime<%= "#{index+1}"%>">
+            <%= render_chart @event.charts_actual(testtime.id)[:column_chart], "column_actual_testtime#{index+1}" %>
+          </div>
+          <div id="table_actual_testtime<%= "#{index+1}"%>">
+            <%= render_chart @event.charts_actual(testtime.id)[:table_chart], "table_actual_testtime#{index+1}" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <h2>重測狀況統計</h2>
+    <!-- Nav tabs -->
+    <ul id="testtime_tabs" class="nav nav-tabs" role="tablist">
+      <li class="active"><a href="#retake_testtime0" role="tab" data-toggle="tab">全部</a></li>
+      <% @event.uniq_testtimes.each_with_index do |testtime, index| %>
+        <li><a href="#retake_testtime<%= "#{index+1}"%>" role="tab" data-toggle="tab"><%= testtime.name%></a></li>
+      <% end %>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div class="tab-pane active" id="retake_testtime0">
+        <div id="pie_retake_testtime0">
+          <%= render_chart @event.charts_retake[:pie_chart], 'pie_retake_testtime0' %>
+        </div>
+        <div id="table_retake_testtime0">
+          <%= render_chart @event.charts_retake[:table_chart], 'table_retake_testtime0' %>
+        </div>
+      </div>
+      <% @event.uniq_testtimes.each_with_index do |testtime, index| %>
+        <div class="tab-pane" id="retake_testtime<%= "#{index+1}"%>">
+          <div id="pie_retake_testtime<%= "#{index+1}"%>">
+            <%= render_chart @event.charts_retake(testtime.id)[:pie_chart], "pie_retake_testtime#{index+1}" %>
+          </div>
+          <div id="table_retake_testtime<%= "#{index+1}"%>">
+            <%= render_chart @event.charts_retake(testtime.id)[:table_chart], "table_retake_testtime#{index+1}" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <h2>違規狀況統計</h2>
+    <!-- Nav tabs -->
+    <ul id="testtime_tabs" class="nav nav-tabs" role="tablist">
+      <li class="active"><a href="#violate_testtime0" role="tab" data-toggle="tab">全部</a></li>
+      <% @event.uniq_testtimes.each_with_index do |testtime, index| %>
+        <li><a href="#violate_testtime<%= "#{index+1}"%>" role="tab" data-toggle="tab"><%= testtime.name%></a></li>
+      <% end %>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div class="tab-pane active" id="violate_testtime0">
+        <div id="pie_violate_testtime0">
+          <%= render_chart @event.charts_violate[:pie_chart], 'pie_violate_testtime0' %>
+        </div>
+        <div id="table_violate_testtime0">
+          <%= render_chart @event.charts_violate[:table_chart], 'table_violate_testtime0' %>
+        </div>
+      </div>
+      <% @event.uniq_testtimes.each_with_index do |testtime, index| %>
+        <div class="tab-pane" id="violate_testtime<%= "#{index+1}"%>">
+          <div id="pie_violate_testtime<%= "#{index+1}"%>">
+            <%= render_chart @event.charts_violate(testtime.id)[:pie_chart], "pie_violate_testtime#{index+1}" %>
+          </div>
+          <div id="table_violate_testtime<%= "#{index+1}"%>">
+            <%= render_chart @event.charts_violate(testtime.id)[:table_chart], "table_violate_testtime#{index+1}" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+
+  </div>
+</div>
+<script>
+$(window).resize(function(){
+    draw_table_actual_testtime0();
+    draw_table_retake_testtime0();
+    draw_table_violate_testtime0();
+    draw_column_actual_testtime0();
+    draw_pie_retake_testtime0();
+    draw_pie_violate_testtime0();
+  <% @event.uniq_testtimes.each_with_index do |testtime, index| %>
+    draw_table_actual_testtime<%= index+1 %>();
+    draw_table_retake_testtime<%= index+1 %>();
+    draw_table_violate_testtime<%= index+1 %>();
+    draw_column_actual_testtime<%= index+1 %>();
+    draw_pie_retake_testtime<%= index+1 %>();
+    draw_pie_violate_testtime<%= index+1 %>();
+  <% end %>
+});
+$('[data-toggle=tab]').on('shown.bs.tab',function(){
+    var violateRegex = /^(violate)_.*$/;
+    var retakeRegex = /^(retake)_.*$/;
+    tab_id = $(this).attr('href').substr(1);
+
+    draw_table_function = 'draw_table_' + tab_id;
+    window[draw_table_function]();
+
+    if(tab_id.match(violateRegex) || tab_id.match(retakeRegex)) {
+      draw_pie_function = 'draw_pie_' + tab_id;
+      window[draw_pie_function]();
+    }else{
+      draw_column_function = 'draw_column_' + tab_id;
+      window[draw_column_function]();
+    }
+});
+
+function autoRefresh() {
+  window.location.reload();
+}
+setInterval('autoRefresh()', 60000);
+</script>
